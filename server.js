@@ -5,6 +5,7 @@ let mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/incidencias');
 let conn = mongoose.connection;
 let multer = require('multer');
+var cors = require('cors');
 let GridFsStorage = require('multer-gridfs-storage');
 let Grid = require('gridfs-stream');
 Grid.mongo = mongoose.mongo;
@@ -13,7 +14,7 @@ let port = 4000;
 
 require('./models/legajoarchivo');
 var LegajoArchivos = mongoose.model('LegajoArchivos');
-
+app.use(cors());
 // Setting up the root route
 app.get('/', (req, res) => {
     res.send('Welcome to the express server');
@@ -149,8 +150,6 @@ app.get('/files', (req, res) => {
         res.json(filesData);
     });
 });
-
-
 
 
 app.delete('/files/:id', (req, res) => {
