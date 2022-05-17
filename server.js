@@ -11,6 +11,43 @@ let Grid = require('gridfs-stream');
 Grid.mongo = mongoose.mongo;
 let gfs = Grid(conn.db);
 let port = 4000;
+let path = require('path');
+var filePath = path.join(__dirname,'./pdf1.pdf');
+var extract = require('pdf-text-extract');
+console.log(filePath)
+extract(filePath, function (err, pages) {
+    if (err) {
+      console.dir(err)
+      return
+    }
+    var tempexpe = [];
+    pages.forEach(page =>{
+        console.log(page)
+        let someText = page.replace(/(\r\n|\n|\r)/gm, " ");
+        //let text = someText.trim(' ');
+        let text = someText.replace(/\s/g, '')
+        var tempcero = text.search('-0-')
+        let substring = text.substring(tempcero-10,tempcero+16);
+        console.log(substring)
+        tempexpe.push(substring)
+    })
+    console.log(tempexpe)
+    /*console.dir(pages[1])
+    let someText = pages[1].replace(/(\r\n|\n|\r)/g, "");
+    let text = someText.trim();
+    let dato = text.search('-')
+    console.log(dato)
+    console.log(text)
+    var tempcero = text.search('-0-')
+    console.log(tempcero)
+    var indices = [];
+    for(var i = 0; i < text.length; i++) {
+        if (text[i].toLowerCase() === "-") indices.push(i);
+    }
+    console.log(indices)
+    let substring = text.substring(tempcero-10,tempcero+16);
+    console.log(substring)*/
+  })
 
 require('./models/legajoarchivo');
 var LegajoArchivos = mongoose.model('LegajoArchivos');
